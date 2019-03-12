@@ -90,14 +90,18 @@ public class AVLTree<dataType> {
 	 public BinaryTreeNode<dataType> balance ( BinaryTreeNode<dataType> p )
 	 {
 	 fixHeight (p);
+	 opCountInsert++;
 	 if (balanceFactor (p) == 2)
 	 {
+		 opCountInsert++;
 	 if (balanceFactor (p.right) < 0)
 	 p.right = rotateRight (p.right);
 	 return rotateLeft (p);
 	 }
+	 opCountInsert++;
 	 if (balanceFactor (p) == -2)
 	 {
+		 opCountInsert++;
 	 if (balanceFactor (p.left) > 0)
 	 p.left = rotateLeft (p.left);
 	 return rotateRight (p);
@@ -119,6 +123,7 @@ public class AVLTree<dataType> {
 	 
 	 public BinaryTreeNode<dataType> insert ( dataType d, BinaryTreeNode<dataType> node )
 	 {
+		 opCountInsert = 0;
 		 opCountInsert++;
 	 if (node == null) {
 		 return new BinaryTreeNode<dataType> (d, null, null);}
@@ -131,6 +136,7 @@ public class AVLTree<dataType> {
 		 node.right = insert (d, node.right);}
 	 
 	 return balance (node);
+	 
 	 }
 	 
 	 

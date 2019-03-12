@@ -20,6 +20,7 @@ public class PowerBSTApp {
 
 	private static BinarySearchTree<Item> x = new BinarySearchTree<>();
 	public static int[] opCountSearch = new int[500];
+	public static int[] opCountInsert = new int[500];
 	
 	/**
 	 * The printAllDateTimes method returns a string output of all the date/times stored in the binary search tree of ‘Item’ objects using the inOrder traversal defined in the BinarySearchTree class.
@@ -48,7 +49,9 @@ public class PowerBSTApp {
 			Scanner scan = new Scanner(new File("cleaned_data.csv"));
 			scan.nextLine();
 			int count = 0;
+			opCountInsert = new int[n];
 			while(count<n) {
+				
 				Scanner line = new Scanner(scan.nextLine()).useDelimiter(",");
 				String date = line.next();
 				double power = line.nextDouble();
@@ -56,6 +59,7 @@ public class PowerBSTApp {
 				double voltage = line.nextDouble();
 				Item temp = new Item(date,power,voltage);
 				x.insert(temp);
+				opCountInsert[count] = x.opCountInsert; 
 				count++;
 				
 			}
@@ -91,33 +95,65 @@ public class PowerBSTApp {
 		
 	}
 	
-	public static int getWorst() {
+	public static int getWorst(int q ) {
+		if(q==0) {
 		int max = opCountSearch[0];
 		for(int i = 0;i<opCountSearch.length;i++) {
 			if(opCountSearch[i]>max) {
 				max = opCountSearch[i];
 			}
 		}
-		return max;
+		return max;}
+		else {
+			int max = opCountInsert[0];
+			for(int i = 0;i<opCountInsert.length;i++) {
+				if(opCountInsert[i]>max) {
+					max = opCountInsert[i];
+				}
+			}
+			return max;
+			
+		}
 	}
 	
-	public static int getBest() {
+	public static int getBest(int q) {
+		if(q==0) {
 		int min = opCountSearch[0];
 		for(int i = 0;i<opCountSearch.length;i++) {
 			if(opCountSearch[i]<min) {
 				min = opCountSearch[i];
 			}
 		}
+		return min;}
+		else {
+			int min = opCountInsert[0];
+		for(int i = 0;i<opCountInsert.length;i++) {
+			if(opCountInsert[i]<min) {
+				min = opCountInsert[i];
+			}
+		}
 		return min;
+			
+		}
 	}
 	
-	public static double getAve() {
+	public static double getAve(int q) {
 		double sum = 0;
+		if(q==0) {
 		for(int i = 0;i<opCountSearch.length;i++) {
 			sum+=opCountSearch[i];
 		}
 	
-	return sum/opCountSearch.length;
+	return sum/opCountSearch.length;}
+		else {
+			for(int i = 0;i<opCountInsert.length;i++) {
+			sum+=opCountInsert[i];
+		}
+	
+	return sum/opCountInsert.length;
+			
+		}
+		
 	}
 	
 	public static void writer(int n) {
@@ -126,9 +162,16 @@ public class PowerBSTApp {
 			FileWriter writer = new FileWriter("outputBST.csv", true);
 			BufferedWriter bw = new BufferedWriter(writer);
 			PrintWriter pw = new PrintWriter(bw);
-			pw.println(n+","+getBest()+","+getWorst()+","+getAve());
+			pw.println(n+","+getBest(0)+","+getWorst(0)+","+getAve(0));
 			pw.flush();
 			pw.close();
+			writer = new FileWriter("outputBSTInsert.csv", true);
+			bw = new BufferedWriter(writer);
+			pw = new PrintWriter(bw);
+			pw.println(n+","+getBest(1)+","+getWorst(1)+","+getAve(1));
+			pw.flush();
+			pw.close();
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

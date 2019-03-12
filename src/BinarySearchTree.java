@@ -20,6 +20,7 @@ public class BinarySearchTree<dataType> {
 	 {
 	 root = null;
 	 opCount = 0;
+	 opCountInsert = 0;
 	 }
 
 	 /**
@@ -102,7 +103,8 @@ public class BinarySearchTree<dataType> {
 	  * Inserts a new node into the binary search tree by means of recursion
 	  */
 	 public void insert ( dataType d, BinaryTreeNode<dataType> node ){
-	 opCount++;
+		 opCountInsert = 0;
+		 opCountInsert++;
 	if (d.toString().compareTo (node.toString()) <= 0){
 		 if (node.left == null) {
 			opCountInsert++;
