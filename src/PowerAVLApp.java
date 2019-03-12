@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class PowerAVLApp {
@@ -20,18 +21,16 @@ public class PowerAVLApp {
 	public static void printDateTime(String dateTime) {
 
 		System.out.println(x.find(dateTime));
+		
 	}
 	
 	
-	
-
-	public static void main(String[] args) {
-		 
+	public static void build(int n) {
 		try {
 			Scanner scan = new Scanner(new File("cleaned_data.csv"));
 			scan.nextLine();
 			int count = 0;
-			while(scan.hasNextLine()) {
+			while(count<n) {
 				Scanner line = new Scanner(scan.nextLine()).useDelimiter(",");
 				String date = line.next();
 				double power = line.nextDouble();
@@ -39,7 +38,7 @@ public class PowerAVLApp {
 				double voltage = line.nextDouble();
 				Item temp = new Item(date,power,voltage);
 				x.insert(temp);
-				
+				count++;
 				
 			}
 	
@@ -48,6 +47,82 @@ public class PowerAVLApp {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public static void subsetSearch(int n) {
+		try {
+			Scanner sc2 = new Scanner(new File("FileWithSearchKeys.txt"));
+			int count = 0;
+			while(count<n) {
+				x.opCount=0;
+				printDateTime(sc2.nextLine());
+				opCountSearch[count] = x.opCount;
+				count++;
+			}
+		
+		
+		
+		
+		
+		
+		
+		
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	public static int getWorst() {
+		int max = opCountSearch[0];
+		for(int i = 0;i<opCountSearch.length;i++) {
+			if(opCountSearch[i]>max) {
+				max = opCountSearch[i];
+			}
+		}
+		return max;
+	}
+	
+	public static int getBest() {
+		int min = opCountSearch[0];
+		for(int i = 0;i<opCountSearch.length;i++) {
+			if(opCountSearch[i]<min) {
+				min = opCountSearch[i];
+			}
+		}
+		return min;
+	}
+	
+	public static double getAve() {
+		double sum = 0;
+		for(int i = 0;i<opCountSearch.length;i++) {
+			sum+=opCountSearch[i];
+		}
+	
+	return sum/opCountSearch.length;
+	}
+	
+	public static void writer(int n) {
+		
+		try {
+			FileWriter writer = new FileWriter("outputAVL.csv", true);
+			BufferedWriter bw = new BufferedWriter(writer);
+			PrintWriter pw = new PrintWriter(bw);
+			pw.println(n+","+getBest()+","+getWorst()+","+getAve());
+			pw.flush();
+			pw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public static void main(String[] args) {
+		 
+		build(500);
 		
 	
 		if(args.length==0) {
@@ -57,10 +132,16 @@ public class PowerAVLApp {
 			try {
 				Scanner sc = new Scanner(new File("FileWithSearchKeys.txt"));
 				int i = 0;
-				while(sc.hasNextLine()) {
-					x.opCount=0;
-					printDateTime(sc.nextLine());
+				while(i<500) {
+					x = new AVLTree<Item>();
+					int n = i+1;
+					opCountSearch = new int[n];
+					build(n);
+					subsetSearch(n);
+					writer(n);
 					
+					System.out.println("..."+n);
+					i++;
 					
 				}
 			

@@ -168,5 +168,9 @@ public class AVLTree<dataType> {
 	public int getOpCount() {
 		return opCount;
 	}
+	
+	public void clear() {
+		root = null;
+	}
 	 
 }
